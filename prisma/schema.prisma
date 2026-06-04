@@ -1,0 +1,28 @@
+// Prisma schema — see https://pris.ly/d/prisma-schema
+//
+// Schema design note:
+//   A favourite is an append-only interaction event. Each click writes one row,
+//   and the "favourite count" for a product is COUNT(*) over its rows. This keeps
+//   the write path trivial (a single INSERT, no read-modify-write race) and matches
+//   the brief's columns exactly: id, product_id, created_at.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// One "favourite" interaction on a product sourced from the public REST API.
+/// `productId` is the external API's product id (not a local FK) because products
+/// are not persisted locally — they are fetched on demand from the data source.
+model Favourite {
+  id        Int      @id @default(autoincrement())
+  productId Int      @map("product_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([productId])
+  @@map("favourites")
+}
