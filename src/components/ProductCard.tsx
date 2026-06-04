@@ -7,6 +7,8 @@ import { FavouriteButton } from "./FavouriteButton";
 interface ProductCardProps {
   product: ProductSummary;
   favouriteCount: number;
+  /** Whether the current visitor has already favourited this product. */
+  favourited: boolean;
   /** Set on above-the-fold cards so their image is eagerly loaded (helps LCP). */
   priority?: boolean;
 }
@@ -18,6 +20,7 @@ interface ProductCardProps {
 export function ProductCard({
   product,
   favouriteCount,
+  favourited,
   priority = false,
 }: ProductCardProps) {
   return (
@@ -65,6 +68,7 @@ export function ProductCard({
               productId={product.id}
               productTitle={product.title}
               initialCount={favouriteCount}
+              initialFavourited={favourited}
             />
           </div>
         </div>

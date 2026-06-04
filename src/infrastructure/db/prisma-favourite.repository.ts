@@ -1,6 +1,9 @@
 import type { FavouriteCounts } from "@/domain/favourite";
 import type { ProductId } from "@/domain/product";
-import type { FavouriteRepository } from "@/domain/repositories";
+import type {
+  FavouriteRepository,
+  FavouriteState,
+} from "@/domain/repositories";
 import { prisma } from "./prisma";
 
 /**
@@ -11,8 +14,25 @@ import { prisma } from "./prisma";
  * replaced (e.g. with a different ORM or a cache) without touching any caller.
  */
 export class PrismaFavouriteRepository implements FavouriteRepository {
-  async add(productId: ProductId): Promise<void> {
-    await prisma.favourite.create({ data: { productId } });
+  async toggle(
+    sessionId: string,
+    productId: ProductId,
+  ): Promise<FavouriteState> {
+    const where = { sessionId_productId: { sessionId, productId } };
+
+    // Run the read-then-write atomically so a double-click can't create two rows.
+    const favourited = await prisma.$transaction(async (tx) => {
+      const existing = await tx.favourite.findUnique({ where });
+      if (existing) {
+        await tx.favourite.delete({ where });
+        return false;
+      }
+      await tx.favourite.create({ data: { sessionId, productId } });
+      return true;
+    });
+
+    const count = await this.countFor(productId);
+    return { favourited, count };
   }
 
   async countFor(productId: ProductId): Promise<number> {
@@ -30,5 +50,27 @@ export class PrismaFavouriteRepository implements FavouriteRepository {
     });
 
     return new Map(rows.map((row) => [row.productId, row._count._all]));
+  }
+
+  async isFavourited(sessionId: string, productId: ProductId): Promise<boolean> {
+    const row = await prisma.favourite.findUnique({
+      where: { sessionId_productId: { sessionId, productId } },
+      select: { id: true },
+    });
+    return row !== null;
+  }
+
+  async favouritedAmong(
+    sessionId: string,
+    productIds: readonly ProductId[],
+  ): Promise<ReadonlySet<ProductId>> {
+    if (productIds.length === 0) return new Set();
+
+    const rows = await prisma.favourite.findMany({
+      where: { sessionId, productId: { in: [...productIds] } },
+      select: { productId: true },
+    });
+
+    return new Set(rows.map((row) => row.productId));
   }
 }

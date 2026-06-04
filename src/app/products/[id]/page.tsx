@@ -11,6 +11,7 @@ import {
   getProductRepository,
 } from "@/infrastructure/container";
 import { formatCategory, formatPrice } from "@/lib/format";
+import { getSessionId } from "@/lib/session";
 import { buildProductJsonLd } from "@/lib/structured-data";
 
 type RouteParams = { id: string };
@@ -53,7 +54,12 @@ export default async function ProductDetailPage({
   const product = await loadProduct(id);
   if (!product) notFound();
 
-  const favouriteCount = await getFavouriteRepository().countFor(product.id);
+  const favourites = getFavouriteRepository();
+  const sessionId = await getSessionId();
+  const [favouriteCount, favourited] = await Promise.all([
+    favourites.countFor(product.id),
+    sessionId ? favourites.isFavourited(sessionId, product.id) : Promise.resolve(false),
+  ]);
   const productJsonLd = buildProductJsonLd(product, config.siteUrl);
 
   return (
@@ -137,6 +143,7 @@ export default async function ProductDetailPage({
               productId={product.id}
               productTitle={product.title}
               initialCount={favouriteCount}
+              initialFavourited={favourited}
               variant="full"
             />
             <p className="mt-3 text-xs text-neutral-400">

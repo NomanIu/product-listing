@@ -18,12 +18,30 @@ export interface ProductRepository {
   getById(id: ProductId): Promise<Product | null>;
 }
 
+/** The state of a single product's favourite after a toggle. */
+export interface FavouriteState {
+  /** Whether the acting session now has this product favourited. */
+  readonly favourited: boolean;
+  /** The product's total favourite count across all sessions. */
+  readonly count: number;
+}
+
 /** Persistence of the "favourite" interaction and the counts derived from it. */
 export interface FavouriteRepository {
-  /** Persist one favourite interaction for the given product. */
-  add(productId: ProductId): Promise<void>;
+  /**
+   * Toggle the favourite for `(sessionId, productId)`: add it if absent, remove it
+   * if present. Returns the resulting state (favourited + total count).
+   */
+  toggle(sessionId: string, productId: ProductId): Promise<FavouriteState>;
   /** Total favourites for a single product. */
   countFor(productId: ProductId): Promise<number>;
   /** Favourite counts for many products in one round-trip (avoids N+1 queries). */
   countForMany(productIds: readonly ProductId[]): Promise<FavouriteCounts>;
+  /** Whether this session has favourited the given product. */
+  isFavourited(sessionId: string, productId: ProductId): Promise<boolean>;
+  /** Which of the given products this session has favourited (one query). */
+  favouritedAmong(
+    sessionId: string,
+    productIds: readonly ProductId[],
+  ): Promise<ReadonlySet<ProductId>>;
 }

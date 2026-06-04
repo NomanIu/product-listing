@@ -1,10 +1,11 @@
 // Prisma schema — see https://pris.ly/d/prisma-schema
 //
 // Schema design note:
-//   A favourite is an append-only interaction event. Each click writes one row,
-//   and the "favourite count" for a product is COUNT(*) over its rows. This keeps
-//   the write path trivial (a single INSERT, no read-modify-write race) and matches
-//   the brief's columns exactly: id, product_id, created_at.
+//   A favourite is a per-visitor toggle. Each visitor is identified by an anonymous
+//   `session_id` (a cookie — no login required), and a visitor can favourite a given
+//   product at most once, enforced by the unique constraint on (session_id, product_id).
+//   Clicking favourites; clicking again removes the row. The "favourite count" for a
+//   product is COUNT(*) over its rows.
 
 generator client {
   provider = "prisma-client"
@@ -15,14 +16,17 @@ datasource db {
   provider = "postgresql"
 }
 
-/// One "favourite" interaction on a product sourced from the public REST API.
+/// One "favourite" by one anonymous visitor on a product from the public REST API.
 /// `productId` is the external API's product id (not a local FK) because products
 /// are not persisted locally — they are fetched on demand from the data source.
 model Favourite {
   id        Int      @id @default(autoincrement())
   productId Int      @map("product_id")
+  sessionId String   @map("session_id")
   createdAt DateTime @default(now()) @map("created_at")
 
+  // One favourite per (visitor, product): makes toggling idempotent.
+  @@unique([sessionId, productId])
   @@index([productId])
   @@map("favourites")
 }

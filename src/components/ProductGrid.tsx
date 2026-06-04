@@ -1,14 +1,20 @@
 import type { FavouriteCounts } from "@/domain/favourite";
-import type { ProductSummary } from "@/domain/product";
+import type { ProductId, ProductSummary } from "@/domain/product";
 import { ProductCard } from "./ProductCard";
 
 interface ProductGridProps {
   products: readonly ProductSummary[];
   favouriteCounts: FavouriteCounts;
+  /** Ids the current visitor has favourited (drives the filled-heart state). */
+  favouritedIds: ReadonlySet<ProductId>;
 }
 
 /** Responsive grid of product cards. The first row is prioritised for LCP. */
-export function ProductGrid({ products, favouriteCounts }: ProductGridProps) {
+export function ProductGrid({
+  products,
+  favouriteCounts,
+  favouritedIds,
+}: ProductGridProps) {
   return (
     <ul
       role="list"
@@ -19,6 +25,7 @@ export function ProductGrid({ products, favouriteCounts }: ProductGridProps) {
           <ProductCard
             product={product}
             favouriteCount={favouriteCounts.get(product.id) ?? 0}
+            favourited={favouritedIds.has(product.id)}
             priority={index < 4}
           />
         </li>
