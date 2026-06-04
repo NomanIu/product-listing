@@ -42,17 +42,18 @@ Pages and the Server Action depend only on the repository **interfaces** in `dom
 
 ## Database schema & API contract
 
-`favourites` is an append-only interaction log (one row per click):
+`favourites` records one row per (visitor, product) favourite:
 
-| column       | type        | notes                          |
-| ------------ | ----------- | ------------------------------ |
-| `id`         | serial PK   |                                |
-| `product_id` | integer     | the external API's product id  |
-| `created_at` | timestamptz | defaults to `now()`            |
+| column       | type        | notes                                            |
+| ------------ | ----------- | ------------------------------------------------ |
+| `id`         | serial PK   |                                                  |
+| `product_id` | integer     | the external API's product id                    |
+| `session_id` | text        | anonymous per-visitor cookie id                  |
+| `created_at` | timestamptz | defaults to `now()`                              |
 
-The favourite count for a product is `COUNT(*)` over its rows (a single `GROUP BY` query powers the whole grid — no N+1).
+A unique constraint on `(session_id, product_id)` makes favouriting idempotent and toggleable. The favourite count for a product is `COUNT(*)` over its rows (a single `GROUP BY` query powers the whole grid — no N+1).
 
-**API contract (Server Action):** `addFavourite(productId: number): Promise<{ ok: boolean; count: number }>` — validates the id, inserts one row, revalidates the affected routes, and returns the fresh count.
+**API contract (Server Action):** `toggleFavourite(productId: number): Promise<{ ok: boolean; favourited: boolean; count: number }>` — validates the id, resolves the visitor from the session cookie, inserts or deletes the visitor's row, revalidates the affected routes, and returns whether the product is now favourited along with the fresh count.
 
 ## Setup
 
@@ -103,4 +104,4 @@ npm run db:studio   # open Prisma Studio
 
 ## Trade-off note
 
-Given the one-day limit, I made favourites **anonymous and append-only**: each click writes a row and the count is a global tally, which keeps the schema and the Server Action minimal and race-free (a single `INSERT`, no read-modify-write). The cost is that a user can favourite the same product repeatedly and can't un-favourite. With more time I'd add a session/user identifier with a unique constraint on `(user_id, product_id)` to make favouriting idempotent and toggleable, layer in rate limiting on the action, and add a test suite (the repository interfaces are already designed to be mocked, so unit-testing the pages and the action against in-memory fakes is straightforward).
+Given the one-day limit, I identify each visitor by an **anonymous session cookie** rather than building real authentication. This keeps favourites idempotent and toggleable — a unique constraint on `(session_id, product_id)` means a click favourites and a second click un-favourites — without the cost of a sign-up/login flow. The trade-off is that favourites live with the cookie: they aren't portable across devices or browsers, and clearing cookies loses them. With more time I'd tie sessions to real accounts, add rate limiting on the Server Action, and add a test suite (the repository interfaces are already designed to be mocked, so unit-testing the pages and the action against in-memory fakes is straightforward).
