@@ -64,7 +64,7 @@ export function FavouriteButton({
       aria-pressed={favourited}
       aria-label={`${actionWord} ${productTitle} ${preposition} favourites`}
       className={[
-        "group/fav inline-flex items-center gap-1.5 rounded-full border font-semibold transition-all duration-200",
+        "group/fav inline-flex cursor-pointer items-center gap-1.5 rounded-full border font-semibold transition-all duration-200",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500",
         "disabled:cursor-not-allowed disabled:opacity-60",
         isFull ? "px-5 py-2.5 text-sm" : "px-2.5 py-1.5 text-xs",
