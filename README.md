@@ -11,6 +11,14 @@ A small server-rendered product catalogue built with **Next.js (App Router)**, *
 - **Accessibility (WCAG 2.2 AA)** — semantic landmarks, a skip link, alt text, visible `:focus-visible` states, AA-contrast colours, and a fully keyboard-operable favourite button with an `aria-live` count.
 - **Structured data** — valid `ItemList` JSON-LD on `/products` and `Product` JSON-LD on the detail page.
 
+## Screenshots
+
+The `/products` listing supports a grid and a list view (toggleable on the page):
+
+| Grid view | List view |
+| --------- | --------- |
+| ![Product listing in grid view](docs/grid_product_page.png) | ![Product listing in list view](docs/list_product_page.png) |
+
 ## Lighthouse results
 
 Lighthouse run against `/products` (Chrome DevTools):
