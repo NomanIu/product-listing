@@ -11,6 +11,8 @@ import { buildItemListJsonLd } from "@/lib/structured-data";
 export const metadata: Metadata = {
   title: "All products",
   description: "Browse our catalogue and favourite the products you love.",
+  // Canonical URL so query strings / alternate paths don't dilute ranking.
+  alternates: { canonical: "/products" },
 };
 
 // Statically prerender the listing and refresh it periodically (ISR). The page does

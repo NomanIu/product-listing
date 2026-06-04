@@ -9,4 +9,6 @@ export const config = {
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   /** How many products to render in the listing grid. */
   listingPageSize: 12,
+  /** Upper bound on product detail URLs to enumerate in the sitemap. */
+  sitemapMaxProducts: 1000,
 } as const;
