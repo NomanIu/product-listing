@@ -27,7 +27,7 @@ export function CatalogView({ items, total }: CatalogViewProps) {
     <>
       <div className="mb-10 flex flex-col gap-4 border-b border-neutral-200 pb-8 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-medium uppercase tracking-wider text-neutral-400">
+          <p className="text-sm font-medium uppercase tracking-wider text-neutral-600">
             Shop the collection
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
@@ -35,7 +35,7 @@ export function CatalogView({ items, total }: CatalogViewProps) {
           </h1>
         </div>
         <div className="flex items-center gap-4">
-          <p className="text-sm text-neutral-500">
+          <p className="text-sm text-neutral-600">
             Showing{" "}
             <span className="font-semibold text-neutral-900">{items.length}</span>{" "}
             of {total} products

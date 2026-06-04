@@ -27,6 +27,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geistSans.variable} h-full`}>
+      <head>
+        {/* Warm up the image CDN connection early to improve LCP. */}
+        <link rel="preconnect" href="https://cdn.dummyjson.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://cdn.dummyjson.com" />
+      </head>
       <body className="flex min-h-full flex-col bg-neutral-50 font-sans text-neutral-900 antialiased">
         {/* Skip link: lets keyboard users jump past the header straight to content. */}
         <a
@@ -73,7 +78,7 @@ export default function RootLayout({
         </main>
 
         <footer className="border-t border-neutral-200/70 bg-white">
-          <div className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-8 text-sm text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-8 text-sm text-neutral-600 sm:flex-row sm:items-center sm:justify-between">
             <p>© 2026 Catalog. A demo storefront.</p>
             <p>
               Data from the public{" "}

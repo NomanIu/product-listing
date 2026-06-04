@@ -8,7 +8,7 @@ export default function NotFound() {
       <h1 className="mt-4 text-lg font-semibold text-neutral-900">
         Product not found
       </h1>
-      <p className="mt-2 text-sm text-neutral-500">
+      <p className="mt-2 text-sm text-neutral-600">
         We couldn&apos;t find the product you were looking for.
       </p>
       <Link

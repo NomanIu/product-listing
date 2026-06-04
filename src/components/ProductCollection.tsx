@@ -39,7 +39,9 @@ export function ProductCollection({ items, view }: ProductCollectionProps) {
             favouriteCount={item.count}
             favourited={item.favourited}
             layout={view}
-            priority={index < 4}
+            // Only the first image is the LCP candidate; eagerly preloading more
+            // would make them compete for bandwidth and delay the LCP itself.
+            priority={index === 0}
           />
         </li>
       ))}

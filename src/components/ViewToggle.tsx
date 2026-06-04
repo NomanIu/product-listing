@@ -62,7 +62,7 @@ function ToggleButton({
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900",
         active
           ? "bg-white text-neutral-900 shadow-sm"
-          : "text-neutral-400 hover:text-neutral-700",
+          : "text-neutral-500 hover:text-neutral-800",
       ].join(" ")}
     >
       {children}

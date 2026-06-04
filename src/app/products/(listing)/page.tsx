@@ -6,7 +6,6 @@ import {
   getFavouriteRepository,
   getProductRepository,
 } from "@/infrastructure/container";
-import { getSessionId } from "@/lib/session";
 import { buildItemListJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
@@ -14,35 +13,34 @@ export const metadata: Metadata = {
   description: "Browse our catalogue and favourite the products you love.",
 };
 
+// Statically prerender the listing and refresh it periodically (ISR). The page does
+// no per-request work, so the HTML — including the LCP hero image — is served from
+// cache instantly instead of being delayed by a database round-trip. The favourite
+// counts stay fresh via this interval and via revalidatePath() on every favourite.
+export const revalidate = 60;
+
 /**
- * Product listing page (Server Component).
+ * Product listing page (Server Component, statically rendered).
  *
- * All data is fetched on the server — the product catalogue from the REST API, the
- * favourite counts, and which products the current visitor has favourited — then
- * composed into a serializable list and handed to the client `CatalogView`, which
- * owns the grid/list toggle. No data is fetched on the client for the initial render.
+ * The catalogue is fetched from the REST API and the favourite counts from the
+ * database, then composed into a serializable list for the client `CatalogView`,
+ * which owns the grid/list toggle. No data is fetched on the client for the initial
+ * render. Per-visitor favourite highlighting lives on the detail page (which is
+ * rendered per request); here we show the public count for each product.
  */
 export default async function ProductsPage() {
   const products = getProductRepository();
   const favourites = getFavouriteRepository();
 
   const page = await products.list({ limit: config.listingPageSize });
-  const productIds = page.items.map((product) => product.id);
+  const favouriteCounts = await favourites.countForMany(
+    page.items.map((product) => product.id),
+  );
 
-  const sessionId = await getSessionId();
-  const [favouriteCounts, favouritedIds] = await Promise.all([
-    favourites.countForMany(productIds),
-    sessionId
-      ? favourites.favouritedAmong(sessionId, productIds)
-      : Promise.resolve(new Set<number>()),
-  ]);
-
-  // Resolve per-product values on the server into a plain, serializable array
-  // (Map/Set cannot cross the server -> client component boundary).
   const items = page.items.map((product) => ({
     product,
     count: favouriteCounts.get(product.id) ?? 0,
-    favourited: favouritedIds.has(product.id),
+    favourited: false,
   }));
 
   const itemListJsonLd = buildItemListJsonLd(page.items, config.siteUrl);

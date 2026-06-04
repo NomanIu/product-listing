@@ -18,7 +18,7 @@ export default function Error({
       <h1 className="text-lg font-semibold text-neutral-900">
         Something went wrong
       </h1>
-      <p className="mt-2 text-sm text-neutral-500">
+      <p className="mt-2 text-sm text-neutral-600">
         We couldn&apos;t load the products. Please try again.
       </p>
       <button

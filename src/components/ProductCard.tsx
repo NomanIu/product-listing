@@ -56,9 +56,12 @@ export function ProductCard({
           sizes={
             isList
               ? "(min-width: 640px) 160px, 112px"
-              : "(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
+              : "(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           }
-          priority={priority}
+          // Next 16 deprecated `priority`; for the LCP image we load it eagerly with a
+          // high fetch priority so the browser fetches it ahead of the page's JS.
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
           className="h-full w-full object-contain transition-transform duration-500 ease-out group-hover:scale-110"
         />
       </Link>
@@ -70,7 +73,7 @@ export function ProductCard({
         ].join(" ")}
       >
         <div className="flex-1">
-          <span className="inline-flex rounded-full bg-neutral-100 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-neutral-500">
+          <span className="inline-flex rounded-full bg-neutral-100 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider text-neutral-600">
             {formatCategory(product.category)}
           </span>
           <h2

@@ -69,7 +69,7 @@ export default async function ProductDetailPage({
       <nav aria-label="Breadcrumb" className="mb-8 text-sm">
         <Link
           href="/products"
-          className="inline-flex items-center gap-1.5 font-medium text-neutral-500 transition-colors hover:text-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+          className="inline-flex items-center gap-1.5 font-medium text-neutral-600 transition-colors hover:text-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
         >
           <span aria-hidden="true">←</span> Back to products
         </Link>
@@ -92,14 +92,14 @@ export default async function ProductDetailPage({
 
         <div className="flex flex-col gap-6 lg:py-4">
           <div>
-            <span className="inline-flex rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium uppercase tracking-wider text-neutral-500">
+            <span className="inline-flex rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium uppercase tracking-wider text-neutral-600">
               {formatCategory(product.category)}
             </span>
             <h1 className="mt-4 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
               {product.title}
             </h1>
             {product.brand && (
-              <p className="mt-2 text-sm text-neutral-500">by {product.brand}</p>
+              <p className="mt-2 text-sm text-neutral-600">by {product.brand}</p>
             )}
           </div>
 
@@ -131,7 +131,7 @@ export default async function ProductDetailPage({
               ★
             </span>
             {product.rating.toFixed(2)}
-            <span className="text-neutral-400"> rating</span>
+            <span className="text-neutral-600"> rating</span>
           </p>
 
           <p className="text-base leading-relaxed text-neutral-600">
@@ -146,7 +146,7 @@ export default async function ProductDetailPage({
               initialFavourited={favourited}
               variant="full"
             />
-            <p className="mt-3 text-xs text-neutral-400">
+            <p className="mt-3 text-xs text-neutral-600">
               Adds this product to the public favourites tally.
             </p>
           </div>
