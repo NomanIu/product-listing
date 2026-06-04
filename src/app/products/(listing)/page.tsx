@@ -35,12 +35,21 @@ export default async function ProductsPage() {
     <>
       <JsonLd data={itemListJsonLd} />
 
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-          Products
-        </h1>
-        <p className="mt-2 text-slate-600">
-          Showing {page.items.length} of {page.total} products.
+      <div className="mb-10 flex flex-col gap-3 border-b border-neutral-200 pb-8 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-sm font-medium uppercase tracking-wider text-neutral-400">
+            Shop the collection
+          </p>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+            All Products
+          </h1>
+        </div>
+        <p className="text-sm text-neutral-500">
+          Showing{" "}
+          <span className="font-semibold text-neutral-900">
+            {page.items.length}
+          </span>{" "}
+          of {page.total} products
         </p>
       </div>
 

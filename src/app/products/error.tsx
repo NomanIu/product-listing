@@ -13,16 +13,18 @@ export default function Error({
   return (
     <div
       role="alert"
-      className="mx-auto max-w-md rounded-xl border border-slate-200 bg-white p-8 text-center"
+      className="mx-auto max-w-md rounded-2xl border border-neutral-200 bg-white p-10 text-center shadow-sm"
     >
-      <h1 className="text-lg font-semibold">Something went wrong</h1>
-      <p className="mt-2 text-sm text-slate-600">
+      <h1 className="text-lg font-semibold text-neutral-900">
+        Something went wrong
+      </h1>
+      <p className="mt-2 text-sm text-neutral-500">
         We couldn&apos;t load the products. Please try again.
       </p>
       <button
         type="button"
         onClick={reset}
-        className="mt-4 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600"
+        className="mt-6 rounded-full bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-neutral-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
       >
         Try again
       </button>

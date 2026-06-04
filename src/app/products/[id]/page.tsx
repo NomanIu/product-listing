@@ -60,18 +60,18 @@ export default async function ProductDetailPage({
     <>
       <JsonLd data={productJsonLd} />
 
-      <nav aria-label="Breadcrumb" className="mb-6 text-sm">
+      <nav aria-label="Breadcrumb" className="mb-8 text-sm">
         <Link
           href="/products"
-          className="text-slate-600 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600"
+          className="inline-flex items-center gap-1.5 font-medium text-neutral-500 transition-colors hover:text-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
         >
-          ← Back to products
+          <span aria-hidden="true">←</span> Back to products
         </Link>
       </nav>
 
-      <article className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-          <div className="relative aspect-square bg-slate-50">
+      <article className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14">
+        <div className="overflow-hidden rounded-3xl border border-neutral-200 bg-gradient-to-b from-neutral-50 to-neutral-100/60">
+          <div className="relative aspect-square p-8 sm:p-12">
             <Image
               src={product.images[0]?.url ?? product.thumbnail.url}
               alt={product.title}
@@ -84,42 +84,64 @@ export default async function ProductDetailPage({
           </div>
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6 lg:py-4">
           <div>
-            <p className="text-sm font-medium uppercase tracking-wide text-slate-500">
+            <span className="inline-flex rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium uppercase tracking-wider text-neutral-500">
               {formatCategory(product.category)}
-            </p>
-            <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
+            </span>
+            <h1 className="mt-4 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
               {product.title}
             </h1>
             {product.brand && (
-              <p className="mt-1 text-sm text-slate-600">by {product.brand}</p>
+              <p className="mt-2 text-sm text-neutral-500">by {product.brand}</p>
             )}
           </div>
 
-          <p className="text-3xl font-bold">{formatPrice(product.price)}</p>
-
-          <p className="flex items-center gap-2 text-sm text-slate-600">
-            <span aria-hidden="true">★</span>
-            <span>
-              {product.rating.toFixed(2)} rating
-              <span aria-hidden="true"> · </span>
-              {product.stock > 0
-                ? `${product.stock} in stock`
-                : "Out of stock"}
+          <div className="flex flex-wrap items-center gap-4">
+            <p className="text-4xl font-bold tracking-tight text-neutral-900">
+              {formatPrice(product.price)}
+            </p>
+            <span
+              className={[
+                "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium",
+                product.stock > 0
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "bg-red-50 text-red-700",
+              ].join(" ")}
+            >
+              <span
+                aria-hidden="true"
+                className={[
+                  "h-1.5 w-1.5 rounded-full",
+                  product.stock > 0 ? "bg-emerald-500" : "bg-red-500",
+                ].join(" ")}
+              />
+              {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
             </span>
+          </div>
+
+          <p className="flex items-center gap-1.5 text-sm font-medium text-neutral-600">
+            <span aria-hidden="true" className="text-amber-400">
+              ★
+            </span>
+            {product.rating.toFixed(2)}
+            <span className="text-neutral-400"> rating</span>
           </p>
 
-          <p className="leading-relaxed text-slate-700">
+          <p className="text-base leading-relaxed text-neutral-600">
             {product.description}
           </p>
 
-          <div className="mt-2">
+          <div className="mt-2 border-t border-neutral-200 pt-6">
             <FavouriteButton
               productId={product.id}
               productTitle={product.title}
               initialCount={favouriteCount}
+              variant="full"
             />
+            <p className="mt-3 text-xs text-neutral-400">
+              Adds this product to the public favourites tally.
+            </p>
           </div>
         </div>
       </article>

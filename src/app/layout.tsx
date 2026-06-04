@@ -26,28 +26,38 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col bg-slate-50 font-sans text-slate-900">
+    <html lang="en" className={`${geistSans.variable} h-full`}>
+      <body className="flex min-h-full flex-col bg-neutral-50 font-sans text-neutral-900 antialiased">
         {/* Skip link: lets keyboard users jump past the header straight to content. */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-neutral-900 focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white focus:shadow-lg"
         >
           Skip to main content
         </a>
 
-        <header className="border-b border-slate-200 bg-white">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+        <header className="sticky top-0 z-40 border-b border-neutral-200/70 bg-white/80 backdrop-blur-md">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
             <Link
               href="/products"
-              className="text-lg font-bold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600"
+              className="group flex items-center gap-2.5 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900"
             >
-              Product Listings
+              <span
+                aria-hidden="true"
+                className="flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-900 text-white transition-transform group-hover:scale-105"
+              >
+                <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
+                  <path d="M3 7l9-4 9 4-9 4-9-4zm0 5l9 4 9-4M3 17l9 4 9-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinejoin="round" />
+                </svg>
+              </span>
+              <span className="text-base font-semibold tracking-tight text-neutral-900">
+                Catalog
+              </span>
             </Link>
-            <nav aria-label="Primary">
+            <nav aria-label="Primary" className="flex items-center gap-6 text-sm">
               <Link
                 href="/products"
-                className="text-sm font-medium text-slate-600 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600"
+                className="font-medium text-neutral-600 transition-colors hover:text-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900"
               >
                 All products
               </Link>
@@ -57,14 +67,26 @@ export default function RootLayout({
 
         <main
           id="main-content"
-          className="mx-auto w-full max-w-6xl flex-1 px-4 py-8"
+          className="mx-auto w-full max-w-7xl flex-1 px-6 py-10 sm:py-14"
         >
           {children}
         </main>
 
-        <footer className="border-t border-slate-200 bg-white">
-          <div className="mx-auto max-w-6xl px-4 py-6 text-sm text-slate-500">
-            Data from the public dummyjson.com REST API.
+        <footer className="border-t border-neutral-200/70 bg-white">
+          <div className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-8 text-sm text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
+            <p>© 2026 Catalog. A demo storefront.</p>
+            <p>
+              Data from the public{" "}
+              <a
+                href="https://dummyjson.com"
+                className="font-medium text-neutral-700 underline-offset-4 hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                dummyjson.com
+              </a>{" "}
+              REST API.
+            </p>
           </div>
         </footer>
       </body>
