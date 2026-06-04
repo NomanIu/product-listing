@@ -11,6 +11,21 @@ A small server-rendered product catalogue built with **Next.js (App Router)**, *
 - **Accessibility (WCAG 2.2 AA)** — semantic landmarks, a skip link, alt text, visible `:focus-visible` states, AA-contrast colours, and a fully keyboard-operable favourite button with an `aria-live` count.
 - **Structured data** — valid `ItemList` JSON-LD on `/products` and `Product` JSON-LD on the detail page.
 
+## Lighthouse results
+
+Lighthouse run against `/products` (Chrome DevTools):
+
+![Lighthouse report for /products — Performance 97, Accessibility 100, Best Practices 100, SEO 100](docs/lighthouse-products.png)
+
+| Category       | Score |
+| -------------- | ----- |
+| Performance    | 97    |
+| Accessibility  | 100   |
+| Best Practices | 100   |
+| SEO            | 100   |
+
+Core Web Vitals: **FCP** 0.8 s · **LCP** 2.5 s · **TBT** 100 ms · **CLS** 0 · **Speed Index** 0.8 s.
+
 ## Tech stack
 
 | Concern            | Choice                                            |
